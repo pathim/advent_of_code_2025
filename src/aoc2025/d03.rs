@@ -10,7 +10,7 @@ fn find_max_first(values: &[u64], start: usize, end: usize) -> (usize, u64) {
     oldmax
 }
 
-fn find_joltage(values: &[u64], n:usize) -> u64 {
+fn find_joltage(values: &[u64], n: usize) -> u64 {
     let mut start = 0;
     let mut result = 0;
     for i in 0..n {
