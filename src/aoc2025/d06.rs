@@ -24,10 +24,12 @@ impl Operations {
 
 pub fn f(input: AocInput) -> AocResult {
     let mut numbers = Vec::new();
+    let mut lines = Vec::new();
     let mut operations = Vec::new();
     for l in input.lines().flatten() {
         let mut current_line = Vec::new();
         let mut current_number = None;
+        lines.push(l.chars().collect::<Vec<_>>());
         for c in l.chars() {
             if c.is_whitespace() {
                 if let Some(v) = current_number.take() {
@@ -63,5 +65,26 @@ pub fn f(input: AocInput) -> AocResult {
             .copied()
             .fold(o.init(), |a, b| o.exec(a, b));
     }
-    res1.into()
+    lines.pop();
+    let mut o_idx = 0;
+    let mut op = &operations[o_idx];
+    let mut val = op.init();
+    let mut res2 = 0;
+    for col in 0..lines[0].len() {
+        let num = lines
+            .iter()
+            .map(|l| l[col])
+            .filter(|c| !c.is_whitespace())
+            .fold(0, |a, b| a * 10 + (b as u64) - ('0' as u64));
+        if num == 0 {
+            res2 += val;
+            o_idx += 1;
+            op = &operations[o_idx];
+            val = op.init();
+        } else {
+            val = op.exec(val, num);
+        }
+    }
+    res2 += val;
+    (res1, res2).into()
 }
