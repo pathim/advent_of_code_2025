@@ -55,10 +55,21 @@ pub fn f(input: AocInput) -> AocResult {
             }
         }
         if i == 999 {
-            let mut sorted = network_nodes.iter().map(|n| n.1.len()).collect::<Vec<_>>();
-            sorted.sort_unstable();
-            let l = sorted.len();
-            res1 = sorted[l - 1] * sorted[l - 2] * sorted[l - 3];
+            let mut max = [0; 3];
+            for l in network_nodes.iter().map(|n| n.1.len()) {
+                if l > max[0] {
+                    max[0] = l;
+                    if l > max[1] {
+                        max[0] = max[1];
+                        max[1] = l;
+                        if l > max[2] {
+                            max[1] = max[2];
+                            max[2] = l;
+                        }
+                    }
+                }
+            }
+            res1 = max.iter().product();
         }
     }
 
