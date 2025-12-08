@@ -1,12 +1,11 @@
 use std::cmp::Reverse;
 use std::{
-    collections::{BinaryHeap, HashMap, HashSet},
+    collections::{BinaryHeap, HashMap},
     str::FromStr,
 };
 
 use crate::{AocInput, AocResult};
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 struct Node {
     x: i64,
     y: i64,
@@ -55,10 +54,11 @@ pub fn f(input: AocInput) -> AocResult {
             dists.push(Reverse((nodes[i].dist2(&nodes[j]), (i, j))));
         }
     }
+    let num_nodes = nodes.len();
     let mut res1 = 0;
     let mut res2 = 0;
-    for i in 0..1000 {
-        let Reverse((d, idx)) = dists.pop().unwrap();
+    for i in 0.. {
+        let Reverse((_d, idx)) = dists.pop().unwrap();
         let new_net = node_networks[&idx.0];
         let old_net = node_networks[&idx.1];
         if new_net != old_net {
@@ -69,6 +69,10 @@ pub fn f(input: AocInput) -> AocResult {
             for n in old_nodes.drain(..) {
                 new_nodes.push(n);
                 *node_networks.get_mut(&n).unwrap() = new_net;
+            }
+            if new_nodes.len() == num_nodes {
+                res2 = nodes[idx.0].x * nodes[idx.1].x;
+                break;
             }
         }
         if i == 999 {
