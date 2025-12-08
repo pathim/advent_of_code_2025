@@ -1,48 +1,27 @@
 use std::cmp::Reverse;
-use std::{
-    collections::{BinaryHeap, HashMap},
-    str::FromStr,
-};
+use std::collections::{BinaryHeap, HashMap};
 
 use crate::{AocInput, AocResult};
 
-struct Node {
-    x: i64,
-    y: i64,
-    z: i64,
+type Node = (i64, i64, i64);
+
+fn dist2(&n1: &Node, n2: &Node) -> i64 {
+    let dx = n1.0 - n2.0;
+    let dy = n1.1 - n2.1;
+    let dz = n1.2 - n2.2;
+    dx * dx + dy * dy + dz * dz
 }
 
-impl Node {
-    fn dist2(&self, other: &Self) -> i64 {
-        let dx = self.x - other.x;
-        let dy = self.y - other.y;
-        let dz = self.z - other.z;
-        dx * dx + dy * dy + dz * dz
-    }
-}
-
-impl FromStr for Node {
-    type Err = ();
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let v = s.split(',').map(|a| a.parse().unwrap()).collect::<Vec<_>>();
-        if v.len() != 3 {
-            Err(())
-        } else {
-            Ok(Self {
-                x: v[0],
-                y: v[1],
-                z: v[2],
-            })
-        }
-    }
+fn make_node(s: &str) -> Node {
+    let v = s.split(',').map(|a| a.parse().unwrap()).collect::<Vec<_>>();
+    (v[0], v[1], v[2])
 }
 
 pub fn f(input: AocInput) -> AocResult {
     let nodes = input
         .lines()
         .flatten()
-        .map(|l| Node::from_str(&l).unwrap())
+        .map(|l| make_node(&l))
         .collect::<Vec<_>>();
     let mut node_networks = (0..nodes.len()).enumerate().collect::<HashMap<_, _>>();
     let mut network_nodes = (0..nodes.len())
@@ -51,7 +30,7 @@ pub fn f(input: AocInput) -> AocResult {
     let mut dists = BinaryHeap::new();
     for i in 0..nodes.len() - 1 {
         for j in i + 1..nodes.len() {
-            dists.push(Reverse((nodes[i].dist2(&nodes[j]), (i, j))));
+            dists.push(Reverse((dist2(&nodes[i], &nodes[j]), (i, j))));
         }
     }
     let num_nodes = nodes.len();
@@ -71,7 +50,7 @@ pub fn f(input: AocInput) -> AocResult {
                 *node_networks.get_mut(&n).unwrap() = new_net;
             }
             if new_nodes.len() == num_nodes {
-                res2 = nodes[idx.0].x * nodes[idx.1].x;
+                res2 = nodes[idx.0].0 * nodes[idx.1].0;
                 break;
             }
         }
