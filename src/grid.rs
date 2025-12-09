@@ -2,6 +2,7 @@ use std::{
     collections::{HashMap, HashSet},
     fmt::Display,
     ops::{Add, Div, Mul, Rem, Sub},
+    str::FromStr,
 };
 
 use crate::AocInput;
@@ -106,6 +107,19 @@ impl Rem<isize> for &V2d {
 
     fn rem(self, rhs: isize) -> Self::Output {
         *self % rhs
+    }
+}
+
+impl FromStr for V2d {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let split = s.split_once(',');
+        if let Some((x, y)) = split {
+            Ok(Self(x.parse().unwrap(), y.parse().unwrap()))
+        } else {
+            Err(())
+        }
     }
 }
 
