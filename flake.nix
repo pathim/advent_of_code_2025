@@ -32,11 +32,13 @@
           # In 'nix develop', we don't need a copy of the source tree
           # in the Nix store.
           src = if inShell then null else ./.;
-          
+
           RUST_SRC_PATH = "${final.rust.packages.stable.rustPlatform.rustLibSrc}";
           nativeBuildInputs =
             [ rustc
               cargo
+              libclang
+              z3
             ] ++ (if inShell then [
               # In 'nix develop', provide some developer tools.
               rustfmt
@@ -49,6 +51,8 @@
               }).cargoHome
             ]);
           shellHook = ''
+          export LIBCLANG_PATH="${libclang.lib}/lib"
+          export Z3_SYS_Z3_HEADER="${z3.dev}/include/z3.h"
           '';
 
           target = "--release";
