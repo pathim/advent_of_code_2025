@@ -15,6 +15,16 @@ impl V2d {
         self.0 == 0 && self.1 == 0
     }
 
+    pub fn abs(self) -> Self {
+        Self(self.0.abs(), self.1.abs())
+    }
+    pub fn min(self, other: &Self) -> Self {
+        Self(self.0.min(other.0), self.1.min(other.1))
+    }
+    pub fn max(self, other: &Self) -> Self {
+        Self(self.0.max(other.0), self.1.max(other.1))
+    }
+
     pub fn neighbors4(&self) -> [Self; 4] {
         [
             Self(self.0 - 1, self.1),
