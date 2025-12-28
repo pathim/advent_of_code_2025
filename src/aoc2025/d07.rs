@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-use crate::{grid::V2d, AocInput, AocResult, Grid};
+use crate::{AocInput, AocResult, Grid, grid::V2d};
 
 fn count_timelines(
     ray: V2d,

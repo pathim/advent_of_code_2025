@@ -53,12 +53,11 @@ fn get_results(
     funcs: &[AocFun],
 ) -> impl Iterator<Item = (usize, Box<impl FnOnce() -> AocResult + '_>)> {
     let input = input::get_all_inputs(year);
-    let results = funcs
+    funcs
         .iter()
         .zip(input)
         .map(|(func, input)| Box::new(move || wrap_func(func, input)))
-        .enumerate();
-    results
+        .enumerate()
 }
 
 fn output_last_result(year: i32, funcs: &[AocFun]) {

@@ -1,4 +1,4 @@
-use crate::{grid::V2d, AocInput, AocResult, Grid};
+use crate::{AocInput, AocResult, Grid, grid::V2d};
 
 fn find_moveable(grid: &Grid) -> Vec<V2d> {
     grid.locations[&'@']
